@@ -10,6 +10,7 @@ djangorestframework = "*"
 "django.db" = "*"
 django-cors-headers = "*"
 networkx = "*"
+scipy = "*"
 
 [dev-packages]
 
