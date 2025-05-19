@@ -25,6 +25,7 @@
 - Poprawne odczytywanie danych wpisywanych przez użytkownika
 - Poprawne obliczanie planu transportowego
 - Intuicyjna część wizualna programu odpowiednio komunikująca się z backendem
+- **Dopisać dla każdego zadania kryteria akceptacji**
 
 ---
 ### POMYSŁY I USPRAWNIENIA:
