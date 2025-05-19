@@ -12,6 +12,7 @@
 - pokazanie kolejnych kroków obliczeniowych programu => L (could have), WS
 - obliczanie dochodów jednostkowych => S (must have), SS
 
+---
 ### EPIK 2: Stworzenie frontendu oraz połączenie go z backendem
 
 - stworzenie części wizualnej programu => M (must have), ŁW
@@ -19,16 +20,18 @@
 - usprawnienie interakcyjności oraz czytelności => S (should have), SS
 - odpowiednie wyświetlanie macierzy wynikowej  => S (should have), ŁW
 
-
+---
 ### KRYTERIA AKCEPTACJI:
 - Poprawne odczytywanie danych wpisywanych przez użytkownika
 - Poprawne obliczanie planu transportowego
 - Intuicyjna część wizualna programu odpowiednio komunikująca się z backendem
 
+---
 ### POMYSŁY I USPRAWNIENIA:
 - Zapisywanie i wczytywanie projektów
 - Dodanie innych problemów niż 2x3
 
+---
 ### HARMONOGRAM POSZCZEGÓLNYCH ZADAŃ:
 **Sprint 1:** Wprowadzenie danych
 
@@ -36,6 +39,7 @@
 
 **Sprint 3:** Upiększenie programu
 
+---
 ### PODZIAŁ OBOWIĄZKÓW
 **Szymon Sikora** - backend
 
