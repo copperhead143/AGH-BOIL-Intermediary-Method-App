@@ -5,7 +5,7 @@
 ### EPIK 1: Wprowadzenie działającego backendu:
 
 - opracowanie modelu przechowywania danych w bazie => M (could have), WS
-- 
+
 _Kryterium: Model danych zawiera wszystkie niezbędne encje i relacje wymagane przez logikę biznesową._
 - połączenie modelu z bazą danych => S (could have), WS
 
