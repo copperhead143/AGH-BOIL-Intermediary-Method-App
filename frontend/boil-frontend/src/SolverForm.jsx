@@ -49,9 +49,9 @@ const SolverForm = () => {
                     <thead>
                     <tr>
                         <th className="title-header"></th>
-                        <th className="title-header">\/PODAŻ | POPYT{">"}</th>
+                        <th className="title-header podaz-poput-header">Podaż / Popyt</th>
                         {demand.map((_, j) => (
-                            <th key={j} className="popyt">
+                            <th key={j} className="popyt popyt-header">
                                 <div className="popyt-label">Odbiorca {j + 1}</div>
                                 <input
                                     type="number"
@@ -65,7 +65,7 @@ const SolverForm = () => {
                                 />
                             </th>
                         ))}
-                        <th className="title-header">Koszt zakupu</th>
+                        <th className="title-header">Zakup</th>
                     </tr>
                     </thead>
 
@@ -79,7 +79,7 @@ const SolverForm = () => {
                                     value={supply[i]}
                                     onChange={(e) => {
                                         const updated = [...supply];
-                                        updated[i] = e.target.value;
+                                        updated[i] = parseFloat(e.target.value);
                                         setSupply(updated);
                                     }}
                                 />
@@ -89,7 +89,9 @@ const SolverForm = () => {
                                     <input
                                         type="number"
                                         value={transportCosts[i][j]}
-                                        onChange={(e) => handleTransportChange(i, j, e.target.value)}
+                                        onChange={(e) =>
+                                            handleTransportChange(i, j, e.target.value)
+                                        }
                                     />
                                 </td>
                             ))}
@@ -99,16 +101,16 @@ const SolverForm = () => {
                                     value={purchaseCosts[i]}
                                     onChange={(e) => {
                                         const updated = [...purchaseCosts];
-                                        updated[i] = e.target.value;
+                                        updated[i] = parseFloat(e.target.value);
                                         setPurchaseCosts(updated);
                                     }}
                                 />
                             </td>
                         </tr>
                     ))}
-                    <tr>
+                    <tr className="footer-row">
                         <td></td>
-                        <th>Koszt Transportu</th>
+                        <th className="footer-header">Koszt transportu</th>
                         {demand.map((_, j) => (
                             <td key={j}>
                                 <input
@@ -116,7 +118,7 @@ const SolverForm = () => {
                                     value={demand[j]}
                                     onChange={(e) => {
                                         const updated = [...demand];
-                                        updated[j] = e.target.value;
+                                        updated[j] = parseFloat(e.target.value);
                                         setDemand(updated);
                                     }}
                                 />
