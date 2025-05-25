@@ -5,14 +5,13 @@ import numpy as np
 from scipy.optimize import linprog
 
 def solve_transport_problem(data):
-    a = data["a"]
-    b = data["b"]
-    kz = data["kz"]
-    c = data["c"]
-    kt = data["kt"]
+    a = np.array(data["a"], dtype=float) #podaz
+    b = np.array(data["b"], dtype=float) #popyt
+    kz = np.array(data["kz"], dtype=float) #koszty zakupu
+    c = np.array(data["c"], dtype=float) #cena sprzedazy
+    kt = np.array(data["kt"], dtype=float) #koszty transportu
 
-    m = len(a)
-    n = len(b)
+    m, n = len(a), len(b)
 
     # Zrównoważenie problemu (jeśli jest niezbilansowany)
     if sum(a) > sum(b):
@@ -28,8 +27,7 @@ def solve_transport_problem(data):
         kt.append([0] * len(b))
 
     # Aktualizacja wymiarów
-    m = len(a)
-    n = len(b)
+    m, n = len(a), len(b)
 
     # Obliczanie zysku jednostkowego
     zij = [[c[j] - kz[i] - kt[i][j] for j in range(n)] for i in range(m)]
