@@ -19,7 +19,6 @@ const SolverForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 1) Przygotuj payload
     const payload = {
       a: supply,
       b: demand,
@@ -30,15 +29,21 @@ const SolverForm = () => {
     console.log("📤 WYSYŁAM payload:", payload);
 
     try {
-      // 2) Wyślij do /api/solve/ (proxy lub pełny URL)
       const res = await axios.post("/api/solve/", payload);
-      console.log("✅ OTRZYMAŁEM odpowiedź:", res);
-      console.log("res.data:", res.data);
-      setResult(res.data);
-      setError("");
+      console.log("✅ OTRZYMAŁEM odpowiedź:", res.data);
+
+      const data = res.data;
+      if (data.success) {
+        setResult(data);
+        setError("");
+      } else {
+        setResult(null);
+        setError(`Solver error: ${data.message}`);
+      }
     } catch (err) {
       console.error("❌ BŁĄD HTTP", err);
-      setError("Błąd podczas przetwarzania danych.");
+      setError("Błąd HTTP podczas przetwarzania danych.");
+      setResult(null);
     }
   };
 
@@ -139,45 +144,69 @@ const SolverForm = () => {
       {error && <p className="error-message">{error}</p>}
 
       {result && result.success && (
-        <div className="section">
-          <h2>Wynik pośrednika:</h2>
-          <p>
-            <strong>Koszt całkowity:</strong> {result.cost_total.toFixed(2)}
-          </p>
-          <p>
-            <strong>Przychód całkowity:</strong>{" "}
-            {result.revenue_total.toFixed(2)}
-          </p>
-          <p>
-            <strong>Zysk pośrednika:</strong> {result.total_profit.toFixed(2)}
-          </p>
+        <>
+          <div className="section">
+            <h2>Wynik pośrednika:</h2>
+            <p>
+              <strong>Koszt całkowity:</strong> {result.cost_total.toFixed(2)}
+            </p>
+            <p>
+              <strong>Przychód całkowity:</strong>{" "}
+              {result.revenue_total.toFixed(2)}
+            </p>
+            <p>
+              <strong>Zysk pośrednika:</strong> {result.total_profit.toFixed(2)}
+            </p>
 
-          <h3>1. Macierz optymalnych przewozów (x<sub>ij</sub>):</h3>
-          <table className="result-table">
-            <tbody>
-              {result.xij.map((row, i) => (
-                <tr key={i}>
-                  {row.map((val, j) => (
-                    <td key={j}>{val.toFixed(2)}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            <h3>1. Macierz optymalnych przewozów (x<sub>ij</sub>):</h3>
+            <table className="result-table">
+              <tbody>
+                {result.xij.map((row, i) => (
+                  <tr key={i}>
+                    {row.map((val, j) => (
+                      <td key={j}>{val.toFixed(2)}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-          <h3>2. Macierz jednostkowych zysków (p<sub>ij</sub>):</h3>
-          <table className="result-table">
-            <tbody>
-              {result.unit_profits.map((row, i) => (
-                <tr key={i}>
-                  {row.map((p, j) => (
-                    <td key={j}>{p.toFixed(2)}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            <h3>2. Macierz jednostkowych zysków (p<sub>ij</sub>):</h3>
+            <table className="result-table">
+              <tbody>
+                {result.unit_profits.map((row, i) => (
+                  <tr key={i}>
+                    {row.map((p, j) => (
+                      <td key={j}>{p.toFixed(2)}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="section">
+            <h2>Kroki rozwiązania:</h2>
+            <div className="steps-container">
+              {result.steps.map((stepObj, idx) => {
+                const { step, ...details } = stepObj;
+                return (
+                  <div key={idx} className="step-item">
+                    <h4>{step.replace(/_/g, " ")}</h4>
+                    <ul>
+                      {Object.entries(details).map(([key, value]) => (
+                        <li key={key}>
+                          <strong>{key}:</strong>{" "}
+                          <code>{JSON.stringify(value)}</code>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
