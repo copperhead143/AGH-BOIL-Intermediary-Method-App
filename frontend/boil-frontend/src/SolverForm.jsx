@@ -33,6 +33,7 @@ const SolverForm = () => {
       // 2) Wyślij do /api/solve/ (proxy lub pełny URL)
       const res = await axios.post("/api/solve/", payload);
       console.log("✅ OTRZYMAŁEM odpowiedź:", res);
+      console.log("res.data:", res.data);
       setResult(res.data);
       setError("");
     } catch (err) {
