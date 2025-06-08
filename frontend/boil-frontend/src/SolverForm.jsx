@@ -193,7 +193,7 @@ const SolverForm = () => {
 
           <div className="section">
             <h3>1. Macierz optymalnych przewozów (x<sub>ij</sub>):</h3>
-            <table className="result-table">
+            <table className="result-table" style={{ margin: "0 auto" }}>
               <tbody>
                 {result.xij.map((row, i) => (
                   <tr key={i}>
@@ -208,7 +208,7 @@ const SolverForm = () => {
 
           <div className="section">
             <h3>2. Macierz jednostkowych zysków (p<sub>ij</sub>):</h3>
-            <table className="result-table">
+            <table className="result-table" style={{ margin: "0 auto" }}>
               <tbody>
                 {result.unit_profits.map((row, i) => (
                   <tr key={i}>
