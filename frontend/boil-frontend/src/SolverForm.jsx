@@ -26,25 +26,56 @@ const SolverForm = () => {
       c: sellingPrices,
       kt: transportCosts,
     };
-    console.log("📤 WYSYŁAM payload:", payload);
 
     try {
       const res = await axios.post("/api/solve/", payload);
-      console.log("✅ OTRZYMAŁEM odpowiedź:", res.data);
-
       const data = res.data;
       if (data.success) {
         setResult(data);
         setError("");
       } else {
-        setResult(null);
         setError(`Solver error: ${data.message}`);
+        setResult(null);
       }
     } catch (err) {
-      console.error("❌ BŁĄD HTTP", err);
       setError("Błąd HTTP podczas przetwarzania danych.");
       setResult(null);
     }
+  };
+
+  // Generujemy kroki wypełniania tabelek
+  const renderFillSteps = () => {
+    if (!result || !result.success) return null;
+
+    const steps = [];
+    // 1) kroki dla xij
+    result.xij.forEach((row, i) => {
+      row.forEach((val, j) => {
+        steps.push(
+          `Dostawca ${i + 1} → Odbiorca ${j + 1}: wstaw x[${i + 1}][${j + 1}] = ${val.toFixed(2)}`
+        );
+      });
+    });
+    // 2) kroki dla p_ij
+    result.unit_profits.forEach((row, i) => {
+      row.forEach((p, j) => {
+        const formula = `${sellingPrices[j]} - ${purchaseCosts[i]} - ${transportCosts[i][j]}`;
+        steps.push(
+          `Oblicz p[${i + 1}][${j + 1}] = ${formula} = ${p.toFixed(2)}`
+        );
+      });
+    });
+
+    return (
+      <div className="section">
+        <h2>Kroki wypełniania tabelek:</h2>
+        <ol>
+          {steps.map((desc, idx) => (
+            <li key={idx}>{desc}</li>
+          ))}
+        </ol>
+      </div>
+    );
   };
 
   return (
@@ -155,9 +186,12 @@ const SolverForm = () => {
               {result.revenue_total.toFixed(2)}
             </p>
             <p>
-              <strong>Zysk pośrednika:</strong> {result.total_profit.toFixed(2)}
+              <strong>Zysk pośrednika:</strong>{" "}
+              {result.total_profit.toFixed(2)}
             </p>
+          </div>
 
+          <div className="section">
             <h3>1. Macierz optymalnych przewozów (x<sub>ij</sub>):</h3>
             <table className="result-table">
               <tbody>
@@ -170,7 +204,9 @@ const SolverForm = () => {
                 ))}
               </tbody>
             </table>
+          </div>
 
+          <div className="section">
             <h3>2. Macierz jednostkowych zysków (p<sub>ij</sub>):</h3>
             <table className="result-table">
               <tbody>
@@ -185,27 +221,7 @@ const SolverForm = () => {
             </table>
           </div>
 
-          <div className="section">
-            <h2>Kroki rozwiązania:</h2>
-            <div className="steps-container">
-              {result.steps.map((stepObj, idx) => {
-                const { step, ...details } = stepObj;
-                return (
-                  <div key={idx} className="step-item">
-                    <h4>{step.replace(/_/g, " ")}</h4>
-                    <ul>
-                      {Object.entries(details).map(([key, value]) => (
-                        <li key={key}>
-                          <strong>{key}:</strong>{" "}
-                          <code>{JSON.stringify(value)}</code>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          {renderFillSteps()}
         </>
       )}
     </div>
