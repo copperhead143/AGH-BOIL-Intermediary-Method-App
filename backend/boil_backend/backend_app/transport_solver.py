@@ -109,7 +109,7 @@ def solve_transport_problem(data):
         A_eq=A_eq,
         b_eq=b_eq,
         bounds=bounds,
-        method="highs"
+        method="simplex"
     )
     steps.append({
         "step": "linprog_result",
